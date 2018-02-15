@@ -26,6 +26,10 @@ $(function () {
     }
 
     function doLogin(loginData) {
+
+        console.log("login parameter"+loginData);
+        console.log("login parameter"+loginData);
+
         $.ajax({
             url: "/auth",
             type: "POST",
@@ -155,6 +159,8 @@ $(function () {
             dataType: "json",
             headers: createAuthorizationTokenHeader(),
             success: function (data, textStatus, jqXHR) {
+
+                console.log("hiiii "+ JSON.stringify(data) );
                 showResponse(jqXHR.status, JSON.stringify(data));
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -170,6 +176,7 @@ $(function () {
             contentType: "application/json; charset=utf-8",
             headers: createAuthorizationTokenHeader(),
             success: function (data, textStatus, jqXHR) {
+                console.log("hiiii "+ JSON.stringify(data) );
                 showResponse(jqXHR.status, data);
             },
             error: function (jqXHR, textStatus, errorThrown) {
