@@ -70,6 +70,19 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
     private List<Authority> authorities;
 
+    public User(){}
+
+    public User(String username, String password, String firstname, String lastname, String email, Boolean enabled, List<Authority> authorities) {
+        this.username = username;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.enabled = enabled;
+        this.lastPasswordResetDate = new Date();
+        this.authorities = authorities;
+    }
+
     public Long getId() {
         return id;
     }
