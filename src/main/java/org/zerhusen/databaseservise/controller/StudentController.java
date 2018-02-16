@@ -7,13 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.zerhusen.databaseservise.entity.Student;
 import org.zerhusen.databaseservise.repository.StudentRepository;
+import org.zerhusen.databaseservise.repository.UserControoller;
+import org.zerhusen.model.security.User;
 
 import java.util.List;
 
@@ -26,6 +25,9 @@ public class StudentController {
 
     @Autowired
     StudentRepository servise; //Service which will do all data retrieval/manipulation work
+
+    @Autowired
+    UserControoller controoller;
 
     @RequestMapping(value = "/createOne")
     public void createOne() {
@@ -59,7 +61,13 @@ public class StudentController {
     }
 
     // -------------------Retrieve Single Student------------------------------------------
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getUser(@PathVariable("id") long id) {
 
+        User user =controoller.findById(id);
+
+        return new ResponseEntity<User>(user, HttpStatus.OK);
+    }
 
 }
 

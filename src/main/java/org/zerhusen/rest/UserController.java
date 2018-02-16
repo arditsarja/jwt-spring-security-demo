@@ -11,11 +11,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.zerhusen.databaseservise.repository.UserControoller;
 import org.zerhusen.model.security.User;
 
+import java.util.ArrayList;
+
 @RestController
 public class UserController {
 @Autowired
 UserControoller controller;
-    @RequestMapping(value = "/add_user", method = RequestMethod.POST)
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
     public ResponseEntity<?> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
 
         controller.saveUser(user);
@@ -29,8 +31,14 @@ UserControoller controller;
     public ResponseEntity<?> getUser(@PathVariable("id") long id) {
 
         User user =controller.findById(id);
+        user.setPassword("ji");
+        user.setAuthorities(new ArrayList<>());
 
-        return new ResponseEntity<User>(user, HttpStatus.OK);
+        ResponseEntity<User> responseEntity =
+                new ResponseEntity<User>(user, HttpStatus.OK);
+
+
+        return responseEntity;
     }
 
 }
