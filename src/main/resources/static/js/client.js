@@ -1,6 +1,4 @@
-/**
- * Created by stephan on 20.03.16.
- */
+
 
 $(function () {
     // VARIABLES =============================================================
@@ -11,6 +9,8 @@ $(function () {
     var $response = $("#response");
     var $login = $("#login");
     var $userInfo = $("#userInfo").hide();
+    var adminRegisterUser = $('#adminRegisterUser').hide();
+    var isAdmin = false;
 
     // FUNCTIONS =============================================================
     function getJwtToken() {
@@ -27,8 +27,8 @@ $(function () {
 
     function doLogin(loginData) {
 
-        console.log("login parameter"+loginData);
-        console.log("login parameter"+loginData);
+        console.log("login parameter" + loginData);
+        console.log("login parameter" + loginData);
 
         $.ajax({
             url: "/auth",
@@ -77,6 +77,7 @@ $(function () {
         }
     }
 
+
     function showUserInformation() {
         $.ajax({
             url: "/user",
@@ -86,19 +87,27 @@ $(function () {
             headers: createAuthorizationTokenHeader(),
             success: function (data, textStatus, jqXHR) {
                 var $userInfoBody = $userInfo.find("#userInfoBody");
-
+                isAdmin = false;
                 $userInfoBody.append($("<div>").text("Username: " + data.username));
                 $userInfoBody.append($("<div>").text("Email: " + data.email));
 
                 var $authorityList = $("<ul>");
                 data.authorities.forEach(function (authorityItem) {
                     $authorityList.append($("<li>").text(authorityItem.authority));
+                    if (authorityItem.authority === "ROLE_ADMIN") {
+                        console.log("is admin");
+                        isAdmin = true;
+                    }
                 });
                 var $authorities = $("<div>").text("Authorities:");
                 $authorities.append($authorityList);
-
                 $userInfoBody.append($authorities);
                 $userInfo.show();
+                if (isAdmin) {
+                    adminRegisterUser.show();
+                } else {
+                    adminRegisterUser.hide();
+                }
             }
         });
     }
@@ -160,7 +169,7 @@ $(function () {
             headers: createAuthorizationTokenHeader(),
             success: function (data, textStatus, jqXHR) {
 
-                console.log("hiiii "+ JSON.stringify(data) );
+                console.log("hiiii " + JSON.stringify(data));
                 showResponse(jqXHR.status, JSON.stringify(data));
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -176,7 +185,7 @@ $(function () {
             contentType: "application/json; charset=utf-8",
             headers: createAuthorizationTokenHeader(),
             success: function (data, textStatus, jqXHR) {
-                console.log("hiiii "+ JSON.stringify(data) );
+                console.log("hiiii " + JSON.stringify(data));
                 showResponse(jqXHR.status, data);
             },
             error: function (jqXHR, textStatus, errorThrown) {
