@@ -1,5 +1,6 @@
 package org.zerhusen.model.security;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class User {
 
     public User(){}
 
-    public User(String username, String password, String firstname, String lastname, String email, Boolean enabled, List<Authority> authorities) {
+    public User(String username, String password, String firstname, String lastname, String email, Boolean enabled) {
         this.username = username;
         this.password = password;
         this.firstname = firstname;
@@ -64,7 +65,8 @@ public class User {
         this.email = email;
         this.enabled = enabled;
         this.lastPasswordResetDate = new Date();
-        this.authorities = authorities;
+
+
     }
 
     public Long getId() {
@@ -137,5 +139,9 @@ public class User {
 
     public void setLastPasswordResetDate(Date lastPasswordResetDate) {
         this.lastPasswordResetDate = lastPasswordResetDate;
+    }
+
+    public void addAuthority(Authority authority) {
+        this.authorities.add(authority);
     }
 }

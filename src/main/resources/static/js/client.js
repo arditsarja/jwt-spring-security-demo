@@ -2,7 +2,7 @@
 
 $(function () {
     // VARIABLES =============================================================
-    var TOKEN_KEY = "jwtToken"
+    var TOKEN_KEY = "jwtToken";
     var $notLoggedIn = $("#notLoggedIn");
     var $loggedIn = $("#loggedIn").hide();
     var $loggedInBody = $("#loggedInBody");
@@ -59,6 +59,7 @@ $(function () {
 
     function doLogout() {
         removeJwtToken();
+        adminRegisterUser.hide();
         $login.show();
         $userInfo
             .hide()
@@ -105,8 +106,6 @@ $(function () {
                 $userInfo.show();
                 if (isAdmin) {
                     adminRegisterUser.show();
-                } else {
-                    adminRegisterUser.hide();
                 }
             }
         });

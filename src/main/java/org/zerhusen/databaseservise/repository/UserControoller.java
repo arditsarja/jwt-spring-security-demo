@@ -1,6 +1,7 @@
 package org.zerhusen.databaseservise.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.zerhusen.model.security.Authority;
@@ -22,14 +23,17 @@ public class UserControoller {
 
     public void saveUser(User user){
 
-        JwtUserFactory.create(user);
+//        JwtUserFactory.create(user);
+        if(user.getId()==null) {
+            em.persist(user);
+        }
+        else {
+            em.merge(user);
+        }
 
 
-//        Authority authority = em.createQuery("SELECT u from Authority u where u.AuthorityName='ROLE_USER'",Authority.class).getSingleResult();
-//        List<User> userList = authority.getUsers();
-//        userList.add(user);
-//        authority.setUsers(userList);
-//        em.merge(authority);
+
+
     }
 
 
