@@ -43,12 +43,20 @@ public class UserController {
 
         user.setLastPasswordResetDate(new Date());
         List<Authority> authorities = new ArrayList<>();
+        List<User> users = new ArrayList<>();
         Authority authority1 = authorityController.findById(USER);
+        users=authority1.getUsers();
+        users.add(user);
+        authority1.setUsers(users);
         authorities.add(authority1);
         if (authority.equals(ROLE_ADMIN)) {
             Authority authority2 = authorityController.findById(ADMIN);
             authorities.add(authority2);
+            users=authority2.getUsers();
+            users.add(user);
+            authority2.setUsers(users);
         }
+        user.setAuthorities(authorities);
         String passord = user.getPassword();
         String passordEncoder = passwordEncoder.encode(passord);
         user.setPassword(passordEncoder);

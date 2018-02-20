@@ -47,7 +47,7 @@ function attachListeners() {
         var passwordConfirm = $('#passwordConfirm').val();
         var role = $("input[name='role']:checked").val();
         var activity = $("input[name='activity']:checked").val();
-
+        var authorities = ["ROLE_USER"];
         var acces = true
         if (password != passwordConfirm) {
             $('#errorPassword').show();
@@ -68,7 +68,8 @@ function attachListeners() {
         } else {
             $('#passwordForce').hide();
         }
-
+        if(role==="ROLE_ADMIN")
+            authorities.push("ROLE_ADMIN");
 
 
 
@@ -79,7 +80,7 @@ function attachListeners() {
                 username: username,
                 email: email,
                 password: password,
-                enabled: activity,
+                enabled: activity
             };
             registerUser(input,role);
         }
