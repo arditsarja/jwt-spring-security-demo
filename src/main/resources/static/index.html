@@ -20,8 +20,8 @@
     <div class="alert alert-danger" id="notLoggedIn">Not logged in!</div>
 
     <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-default" id="login">
+
+            <div class=" col-sm-12 panel panel-default" id="login">
                 <div class="panel-heading">
                     <h3 class="panel-title">Login</h3>
                 </div>
@@ -48,7 +48,7 @@
                 </div>
             </div>
 
-            <div id="userInfo">
+            <div class=" col-sm-12" id="userInfo">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">Authenticated user</h3>
@@ -59,12 +59,12 @@
                     </div>
                 </div>
             </div>
-            <div class="panel panel-default" id="adminRegisterUser ">
+            <div class="col-sm-12 panel panel-default" id="adminRegisterUser ">
                 <div class="panel-heading">
                     <h3 class="panel-title">Rgister user</h3>
                 </div>
                 <div class="panel-body">
-                    <div class=" input-group col-md-6 form-horizontal">
+                    <div class=" input-group form-horizontal">
                         First Name<input class="form-control" type="text" id="firstname" placeholder="First Name"><br/>
                         Last Name<input class="form-control" type="text" id="lastname" placeholder="Last Name"><br/>
                         Username<input class="form-control" type="text" id="username" placeholder="Username"><br/>
@@ -79,7 +79,7 @@
                         <input type="radio" name="role"  value="ROLE_USER"> User<br>
                         <br/>
                         Activity<br>
-                        <input type="radio" name="activity"  value="true"> Active<br>
+                        <input type="radio" name="activity"  value="tue"> Active<br>
                         <input type="radio" name="activity"  value="false"> Not Active<br>
                         <br/>
                         <br/>
@@ -88,7 +88,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="hidden col-md-6">
                 <div class="btn-group" role="group" aria-label="..." style="margin-bottom: 16px;">
                     <button type="button" class="btn btn-default" id="exampleServiceBtn">call example service</button>
                     <button type="button" class="btn btn-default" id="adminServiceBtn">call admin protected service
@@ -105,7 +105,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row hidden">
             <div id="loggedIn" class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -116,7 +116,7 @@
             </div>
         </div>
 
-    </div>
+
 </div>
 
 <div class="modal fade" tabindex="-1" role="dialog" id="loginErrorModal">

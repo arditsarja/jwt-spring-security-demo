@@ -44,4 +44,7 @@ public class StudentRepository {
        return em.createQuery("SELECT s from Student s order by s.id").getResultList();
     }
 
+    public void deleteAllStudents() {
+        em.createQuery("delete from Student").executeUpdate();
+    }
 }

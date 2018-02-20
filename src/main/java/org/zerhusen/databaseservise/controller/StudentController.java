@@ -48,28 +48,55 @@ public class StudentController {
 
 // -------------------Create a User-------------------------------------------
 
-    @RequestMapping(value = "/user/", method = RequestMethod.POST)
+    @RequestMapping(value = "/student", method = RequestMethod.POST)
     public ResponseEntity<?> createUser(@RequestBody Student student, UriComponentsBuilder ucBuilder) {
         logger.info("Creating User : {}", student);
-
-
         servise.save(student);
-
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/api/user/{id}").buildAndExpand(student.getId()).toUri());
+        headers.setLocation(ucBuilder.path("/api/student/{id}").buildAndExpand(student.getId()).toUri());
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
     // -------------------Retrieve Single Student------------------------------------------
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-    public ResponseEntity<?> getUser(@PathVariable("id") long id) {
+    @RequestMapping(value = "/student/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getUser(@PathVariable("id") Long id) {
 
-        User user =controoller.findById(id);
+        Student student =servise.findById(id);
 
-        return new ResponseEntity<User>(user, HttpStatus.OK);
+        return new ResponseEntity<Student>(student, HttpStatus.OK);
     }
 
+    // ------------------- Delete a User-----------------------------------------
+
+    @RequestMapping(value = "/student/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
+        logger.info("Fetching & Deleting User with id {}", id);
+
+        Student student = servise.findById(id);
+        if (student == null) {
+            logger.error("Unable to delete. User with id {} not found.", id);
+            return new ResponseEntity(new String("Unable to delete. User with id " + id + " not found."),
+                    HttpStatus.NOT_FOUND);
+        }
+        servise.deleteById(id);
+        return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
+    }
+
+    // ------------------- Delete All Users-----------------------------
+
+    @RequestMapping(value = "/student", method = RequestMethod.DELETE)
+    public ResponseEntity<Student> deleteAllUsers() {
+        logger.info("Deleting All Users");
+
+        servise.deleteAllStudents();
+        return new ResponseEntity<Student>(HttpStatus.NO_CONTENT);
+    }
 }
+
+
+
+
+
 
 
 
