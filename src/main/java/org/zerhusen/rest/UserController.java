@@ -3,7 +3,9 @@ package org.zerhusen.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -18,7 +20,7 @@ import org.zerhusen.security.JwtAuthenticationRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+@PreAuthorize("hasRole('ADMIN')")
 @RestController
 public class UserController {
     private static final Long ADMIN = 2l;
@@ -37,7 +39,7 @@ public class UserController {
     @Autowired
     AuthorityController authorityController;
 
-    //    @WithMockUser(roles = "ADMIN")
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/create_user/{authority}", method = RequestMethod.PUT)
     public String createUser(@RequestBody User user, @PathVariable("authority") String authority) {
 
@@ -45,14 +47,14 @@ public class UserController {
         List<Authority> authorities = new ArrayList<>();
         List<User> users = new ArrayList<>();
         Authority authority1 = authorityController.findById(USER);
-        users=authority1.getUsers();
+        users = authority1.getUsers();
         users.add(user);
         authority1.setUsers(users);
         authorities.add(authority1);
         if (authority.equals(ROLE_ADMIN)) {
             Authority authority2 = authorityController.findById(ADMIN);
             authorities.add(authority2);
-            users=authority2.getUsers();
+            users = authority2.getUsers();
             users.add(user);
             authority2.setUsers(users);
         }
@@ -60,7 +62,7 @@ public class UserController {
         String passord = user.getPassword();
         String passordEncoder = passwordEncoder.encode(passord);
         user.setPassword(passordEncoder);
-        repository.save(new PassowordHistory(user.getId(),passord,passordEncoder));
+        repository.save(new PassowordHistory(user.getId(), passord, passordEncoder));
         controller.saveUser(user);
 
         return "DF";
