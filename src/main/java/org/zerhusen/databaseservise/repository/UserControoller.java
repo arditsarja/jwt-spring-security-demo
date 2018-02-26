@@ -10,6 +10,7 @@ import org.zerhusen.security.JwtUser;
 import org.zerhusen.security.JwtUserFactory;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 
 @Repository
@@ -21,23 +22,22 @@ public class UserControoller {
     EntityManager em;
 
 
-    public void saveUser(User user){
+    public void saveUser(User user) {
 
-//        JwtUserFactory.create(user);
-        if(user.getId()==null) {
+        if (user.getId() == null) {
             em.persist(user);
-        }
-        else {
+        } else {
             em.merge(user);
         }
-
-
-
 
     }
 
 
     public User findById(Long id) {
-        return em.find(User.class,id);
+        return em.find(User.class, id);
     }
+//    public User findByUsername(String name) {
+//
+//        Query query = em.f
+//    }
 }
