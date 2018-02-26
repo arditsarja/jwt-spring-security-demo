@@ -9,8 +9,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
             integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
             crossorigin="anonymous"></script>
-    <script src="js/client.js"></script>
-    <script src="js/admin.js"></script>
+
+
     <script src="js/user.js"></script>
 </head>
 
@@ -19,12 +19,17 @@ KEtu eshte nderfaqja e perdoruesit
 <form method="post" action="/api/student" name="createorupdatestudent"><br>
     <div id="idStudentShow">ID<input id="idStudent" type="text">
 
-    </div> <input id="create" type="checkbox" value="krijo"> KrijoStudent
+    </div> <input id="create" type="checkbox" value="krijo"> Perditeso Perdorues
     <div>Emer<input id="firstNameStudent" type="text"></div>
     <div>Mbiemer<input id="lastNameStudent" type="text"></div>
     <div>Adresa<input id="adress" type="text"></div>
     <button type="button" id="createStudent">Krijo</button>
     <button type="button" id="updateStudent">Perditso</button>
+
 </form>
+<div><p id="status"></p></div>
+<div><button type="button" id="getAllStudents">Afisho tabelen e plote</button></div>
+<div><button type="button" onclick="prove()">Afisho tabelen e plote</button></div>
+<div id="tabela"></div>
 </body>
 </html>

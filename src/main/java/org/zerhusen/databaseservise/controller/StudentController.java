@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.zerhusen.databaseservise.entity.Student;
 import org.zerhusen.databaseservise.repository.StudentRepository;
@@ -29,6 +30,10 @@ public class StudentController {
     @Autowired
     UserControoller controoller;
 
+
+
+
+
     @RequestMapping(value = "/createOne")
     public void createOne() {
         servise.save(new Student("Ardit", "Sarja", "sta them"));
@@ -36,7 +41,7 @@ public class StudentController {
 
     // -------------------Retrieve All Students---------------------------------------------
 
-    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+    @RequestMapping(value = "/student", method = RequestMethod.GET)
     public ResponseEntity<List<Student>> listAllStudents() {
         List<Student> Students = servise.getAll();
         if (Students.isEmpty()) {
@@ -53,8 +58,7 @@ public class StudentController {
         logger.info("Creating User : {}", student);
         servise.save(student);
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/api/student/{id}").buildAndExpand(student.getId()).toUri());
-        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        return new ResponseEntity<Student>(student, HttpStatus.OK);
     }
 
     // -------------------Retrieve Single Student------------------------------------------

@@ -1,13 +1,22 @@
 $(document).ready(function () {
 
-    $("#create").click();
-
-
     attachListeners();
 
 });
+function deleteStudentById(id) {
+    console.log("idijaaaaaa" + id);
 
+}
+
+function updateStudentById(id) {
+    console.log("idijaaaaaa" + id);
+
+}
 function attachListeners() {
+
+    $("#idStudentShow").hide();
+    $("#createStudent").show();
+    $("#updateStudent").hide();
 
     $("#create").change(function () {
         seeFields();
@@ -18,6 +27,9 @@ function attachListeners() {
     $("#updateStudent").click(function () {
         updateStudent();
     });
+    $("#getAllStudents").click(function () {
+        getAllStudent();
+    });
 
     // If the checkbox is checked, display the output text
 
@@ -27,19 +39,151 @@ function attachListeners() {
 function seeFields() {
     if ($("#create").is(':checked')) {
         $("#idStudentShow").show();
-        $("#createStudent").show();
-        $("#updateStudent").hide();
-    } else {
-        $("#idStudentShow").hide();
         $("#createStudent").hide();
         $("#updateStudent").show();
+    } else {
+        $("#idStudentShow").hide();
+        $("#createStudent").show();
+        $("#updateStudent").hide();
     }
 }
 
 function createStudent() {
-    console.log("po e krijon");
+
+    var input = {
+        firstName: $('#firstNameStudent').val(),
+        lastName: $('#lastNameStudent').val(),
+        adress: $('#adress').val()
+    };
+    $.ajax({
+
+
+        url: "/api/student",
+        method: "POST",
+        dataType: "json",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + localStorage.getItem("jwtToken"),
+        },
+        data: JSON.stringify(input),
+        success: function (data, textStatus, jqXHR) {
+            $('#status').text("U krijua me sukses");
+            console.log("U krijua me sukses");
+        },
+        error: function (xhr, textStatus, errorThrown) {
+
+            $('#status').text("Ka probleme ne sistem provoni me vone");
+        }
+    });
+}
+
+function getAllStudent() {
+    $.ajax({
+
+
+        url: "/api/student",
+        method: "GET",
+        dataType: "json",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + localStorage.getItem("jwtToken"),
+        },
+
+        success: function (data, textStatus, jqXHR) {
+            console.log(data)
+
+            var html = '';
+            if (data.length > 0) {
+                html += '<table>';
+                html += '<tr>';
+                for (var key in data[0]) {
+                    if (key != "id") {
+                        html += "<td>" + key + "</td>";
+                    }
+                }
+                html += '</tr>';
+            }
+            for (var i = 0; i < data.length; i++) {
+                var obj = data[i];
+                var count = Object.keys(obj).length;
+                console.log(count);
+                var index = 0;
+                html += '<tr>';
+                for (var key in obj) {
+                    index++;
+                    if (key != "id") {
+                        var value = obj[key];
+                        html += "<td><input type='text' id='" + key + data[i].id + "' value='" + value + "'/></td>";
+                    }
+                    if (index === count) {
+                        html += "<td><button type='button' click='function hid() { " + updateStudentById(data[i].id) + ";};'>Perditso</button></td>";
+                        html += '<td><button type="button" onclick="function hi() { ' + deleteStudentById(data[i].id) + ';}">Fshi</button></td>';
+                        index = 0;
+                    }
+                }
+                html += '</tr>';
+            }
+            // per ta kuptuar si lloghike
+            // for (var i = 0 ;i<data.length;i++)
+            // {
+            //     html += '<tr>';
+            //     html += '<td>';
+            //     html+=data[i].firstName;
+            //     html += '</td>';
+            //     html += '<td>';
+            //     html+=data[i].lastName;
+            //     html += '</td>';
+            //     html += '<td>';
+            //     html+=data[i].adress;
+            //     html += '</td>';
+            //     html += '</tr>';
+            // }
+            if (data.length > 0) {
+                html += '</table>';
+                document.getElementById("tabela").innerHTML = html;
+            }
+
+        },
+        error: function (xhr, textStatus, errorThrown) {
+
+
+        }
+    });
+}
+
+
+
+function prove() {
+    console.log("provaaaaaaaaaa");
 }
 
 function updateStudent() {
-    console.log("po e perditson");
+    var input = {
+        id: $('#idStudent').val(),
+        firstName: $('#firstNameStudent').val(),
+        lastName: $('#lastNameStudent').val(),
+        adress: $('#adress').val()
+    };
+    $.ajax({
+
+
+        url: "/api/student",
+        method: "POST",
+        dataType: "json",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + localStorage.getItem("jwtToken"),
+        },
+        data: JSON.stringify(input),
+        success: function (data, textStatus, jqXHR) {
+            $('#status').text("U perditsua me sukses");
+        },
+        error: function (xhr, textStatus, errorThrown) {
+
+            $('#status').text("Ka probleme ne sistem provoni me vone");
+        }
+    });
 }
