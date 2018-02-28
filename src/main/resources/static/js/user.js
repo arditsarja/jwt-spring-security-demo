@@ -31,6 +31,9 @@ function attachListeners() {
         getAllStudent();
     });
 
+
+
+
     // If the checkbox is checked, display the output text
 
 
@@ -94,7 +97,7 @@ function getAllStudent() {
         success: function (data, textStatus, jqXHR) {
             console.log(data)
 
-            var html = '';
+            var html = "";
             if (data.length > 0) {
                 html += '<table>';
                 html += '<tr>';
@@ -118,8 +121,8 @@ function getAllStudent() {
                         html += "<td><input type='text' id='" + key + data[i].id + "' value='" + value + "'/></td>";
                     }
                     if (index === count) {
-                        html += "<td><button type='button' click='function hid() { " + updateStudentById(data[i].id) + ";};'>Perditso</button></td>";
-                        html += '<td><button type="button" onclick="function hi() { ' + deleteStudentById(data[i].id) + ';}">Fshi</button></td>';
+                        html += '<td><button type="button" onclick="updateStudentById('+obj.id+')">Perditso</button></td>';
+                        html += '<td><button type="button" onclick="deleteStudentById('+obj.id+')">Fshi</button></td>';
                         index = 0;
                     }
                 }
