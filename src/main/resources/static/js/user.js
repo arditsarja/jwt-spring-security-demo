@@ -6,10 +6,75 @@ $(document).ready(function () {
 function deleteStudentById(id) {
     console.log("idijaaaaaa" + id);
 
+    $.ajax({
+
+
+        url: "/api/student/"+id,
+        method: "DELETE",
+        dataType: "json",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + localStorage.getItem("jwtToken"),
+        },
+
+        success: function (data, textStatus, jqXHR) {
+            $('#status').text("U krijua me sukses");
+            console.log("U u perditesua me suksess me sukses");
+
+            console.log("#row"+id);
+            console.log("#row"+id);
+            console.log("#row"+id);
+            console.log("#row"+id);
+            console.log("#row"+id);
+            $("#row"+id).hide() ;
+        },
+        error: function (xhr, textStatus, errorThrown) {
+
+            $('#status').text("Ka probleme ne sistem provoni me vone");
+        }
+    });
 }
 
 function updateStudentById(id) {
+    var firstName = $("#firstName"+id).val();
+    var lastName = $("#lastName"+id).val();
+    var adress = $("#adress"+id).val();
+
+
+
     console.log("idijaaaaaa" + id);
+    console.log("idijaaaaaa" + firstName);
+    console.log("idijaaaaaa" + lastName);
+    console.log("idijaaaaaa" + adress);
+
+    var input = {
+        id:id,
+        firstName: firstName,
+        lastName:lastName,
+        adress: adress
+    };
+    $.ajax({
+
+
+        url: "/api/student",
+        method: "POST",
+        dataType: "json",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + localStorage.getItem("jwtToken"),
+        },
+        data: JSON.stringify(input),
+        success: function (data, textStatus, jqXHR) {
+            $('#status').text("U krijua me sukses");
+            console.log("U u perditesua me suksess me sukses");
+        },
+        error: function (xhr, textStatus, errorThrown) {
+
+            $('#status').text("Ka probleme ne sistem provoni me vone");
+        }
+    });
 
 }
 function attachListeners() {
@@ -23,6 +88,8 @@ function attachListeners() {
     });
     $("#createStudent").click(function () {
         createStudent();
+    });$("#homepage").click(function () {
+        window.location="index.html"
     });
     $("#updateStudent").click(function () {
         updateStudent();
@@ -99,7 +166,7 @@ function getAllStudent() {
 
             var html = "";
             if (data.length > 0) {
-                html += '<table>';
+                html += '<table class="table">';
                 html += '<tr>';
                 for (var key in data[0]) {
                     if (key != "id") {
@@ -113,16 +180,22 @@ function getAllStudent() {
                 var count = Object.keys(obj).length;
                 console.log(count);
                 var index = 0;
-                html += '<tr>';
+                var rowClass="warning";
+                if (data[i]%2==0){
+                    rowClass="active";
+                }
+
+
+                html += '<tr class="'+rowClass+'" id="row'+data[i].id+'">';
                 for (var key in obj) {
                     index++;
                     if (key != "id") {
                         var value = obj[key];
-                        html += "<td><input type='text' id='" + key + data[i].id + "' value='" + value + "'/></td>";
+                        html += "<td><input type='text' class='form-control' id='" + key + data[i].id + "' value='" + value + "'/></td>";
                     }
                     if (index === count) {
-                        html += '<td><button type="button" onclick="updateStudentById('+obj.id+')">Perditso</button></td>';
-                        html += '<td><button type="button" onclick="deleteStudentById('+obj.id+')">Fshi</button></td>';
+                        html += '<td><button class="btn btn-success" type="button" onclick="updateStudentById('+obj.id+')">Perditso</button></td>';
+                        html += '<td><button class="btn btn-danger" type="button" onclick="deleteStudentById('+obj.id+')">Fshi</button></td>';
                         index = 0;
                     }
                 }
@@ -154,12 +227,6 @@ function getAllStudent() {
 
         }
     });
-}
-
-
-
-function prove() {
-    console.log("provaaaaaaaaaa");
 }
 
 function updateStudent() {
