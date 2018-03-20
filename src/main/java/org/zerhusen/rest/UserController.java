@@ -1,5 +1,6 @@
 package org.zerhusen.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.web.bind.annotation.*;
 
 
+import org.zerhusen.AesUtil;
+import org.zerhusen.Message;
 import org.zerhusen.databaseservise.entity.PassowordHistory;
 import org.zerhusen.databaseservise.repository.AuthorityController;
 import org.zerhusen.databaseservise.repository.PassordHistoryRepository;
@@ -17,6 +20,7 @@ import org.zerhusen.model.security.Authority;
 import org.zerhusen.model.security.User;
 import org.zerhusen.security.JwtAuthenticationRequest;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,10 +43,19 @@ public class UserController {
     @Autowired
     AuthorityController authorityController;
 
+
+    ObjectMapper mapper = new ObjectMapper();
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/create_user/{authority}", method = RequestMethod.PUT)
-    public String createUser(@RequestBody User user, @PathVariable("authority") String authority) {
+    public String createUser(@RequestBody Message message, @PathVariable("authority") String authority) {
 
+        String plaintext = new AesUtil().decrypt(message.getMessage());
+        User user = null;
+        try {
+            user =  mapper.readValue(plaintext, User.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         user.setLastPasswordResetDate(new Date());
         List<Authority> authorities = new ArrayList<>();
         List<User> users = new ArrayList<>();

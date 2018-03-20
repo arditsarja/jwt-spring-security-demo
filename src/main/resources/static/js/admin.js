@@ -8,7 +8,9 @@ $(document).ready(function () {
 function registerUser(input,role) {
     console.log("do therritet pa merak");
     console.log(JSON.stringify(input));
-
+    var plaintext = JSON.stringify(input);
+    var ciphertext = aesUtil.encrypt(salt, iv, passphrase, plaintext);
+    var messsage = {message:ciphertext};
 
     $.ajax({
         url: "/create_user/"+role,
@@ -19,7 +21,7 @@ function registerUser(input,role) {
             'Content-Type': 'application/json',
             Authorization: 'Bearer ' + localStorage.getItem("jwtToken"),
         },
-        data: JSON.stringify(input),
+        data: JSON.stringify(messsage),
         success: function (data, textStatus, jqXHR) {
             console.log("YESSSSSSSSSSSSSSSSSS");
             console.log("YESSSSSSSSSSSSSSSSSS");
