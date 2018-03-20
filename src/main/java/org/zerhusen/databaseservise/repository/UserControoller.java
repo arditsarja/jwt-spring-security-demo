@@ -36,8 +36,11 @@ public class UserControoller {
     public User findById(Long id) {
         return em.find(User.class, id);
     }
+
+    
+
 //    public User findByUsername(String name) {
 //
-//        Query query = em.f
+//        Query query = em.find(User.class,id);
 //    }
 }

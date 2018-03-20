@@ -1,6 +1,8 @@
 package org.zerhusen.databaseservise.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +12,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.zerhusen.AesUtil;
+import org.zerhusen.Encryption;
+import org.zerhusen.Message;
 import org.zerhusen.databaseservise.entity.Student;
 import org.zerhusen.databaseservise.repository.StudentRepository;
 import org.zerhusen.databaseservise.repository.UserControoller;
 import org.zerhusen.model.security.User;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -31,44 +37,55 @@ public class StudentController {
     UserControoller controoller;
 
 
-
-
-
-    @RequestMapping(value = "/createOne")
-    public void createOne() {
-        servise.save(new Student("Ardit", "Sarja", "sta them"));
-    }
+    ObjectMapper mapper = new ObjectMapper();
 
     // -------------------Retrieve All Students---------------------------------------------
-
     @RequestMapping(value = "/student", method = RequestMethod.GET)
-    public ResponseEntity<List<Student>> listAllStudents() {
-        List<Student> Students = servise.getAll();
-        if (Students.isEmpty()) {
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
-            // You many decide to return HttpStatus.NOT_FOUND
+    public ResponseEntity<?> getAlStudents() {
+
+
+        String jsonInString = "";
+        try {
+            jsonInString = mapper.writeValueAsString(servise.getAll());
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         }
-        return new ResponseEntity<List<Student>>(Students, HttpStatus.OK);
+        String plaintext = new AesUtil().encrypt(jsonInString);
+
+        return new ResponseEntity<Message>(new Message(plaintext), HttpStatus.OK);
     }
+
 
 // -------------------Create a User-------------------------------------------
 
+
     @RequestMapping(value = "/student", method = RequestMethod.POST)
-    public ResponseEntity<?> createUser(@RequestBody Student student, UriComponentsBuilder ucBuilder) {
-        logger.info("Creating User : {}", student);
-        servise.save(student);
-        HttpHeaders headers = new HttpHeaders();
-        return new ResponseEntity<Student>(student, HttpStatus.OK);
+    public ResponseEntity<?> createStudent(@RequestBody Message studentJson, UriComponentsBuilder ucBuilder) {
+
+        String plaintext = new AesUtil().decrypt(studentJson.getMessage());
+        try {
+            Student student = mapper.readValue(plaintext, Student.class);
+            servise.save(student);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<Message>(new Message("hihihi"), HttpStatus.OK);
     }
 
     // -------------------Retrieve Single Student------------------------------------------
     @RequestMapping(value = "/student/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getUser(@PathVariable("id") Long id) {
+        String jsonInString = "";
+        try {
+            jsonInString = mapper.writeValueAsString(servise.findById(id));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        String plaintext = new AesUtil().encrypt(jsonInString);
 
-        Student student =servise.findById(id);
-
-        return new ResponseEntity<Student>(student, HttpStatus.OK);
+        return new ResponseEntity<Message>(new Message(plaintext), HttpStatus.OK);
     }
+
 
     // ------------------- Delete a User-----------------------------------------
 

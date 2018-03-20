@@ -1,20 +1,21 @@
 $(document).ready(function () {
-
     attachListeners();
+    // postEncrypt();
+    // getAllStudents();
 
 });
+
 function deleteStudentById(id) {
     console.log("idijaaaaaa" + id);
 
     $.ajax({
 
 
-        url: "/api/student/"+id,
+        url: "/api/student/" + id,
         method: "DELETE",
         dataType: "json",
         headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
+
             Authorization: 'Bearer ' + localStorage.getItem("jwtToken"),
         },
 
@@ -22,12 +23,12 @@ function deleteStudentById(id) {
             $('#status').text("U krijua me sukses");
             console.log("U u perditesua me suksess me sukses");
 
-            console.log("#row"+id);
-            console.log("#row"+id);
-            console.log("#row"+id);
-            console.log("#row"+id);
-            console.log("#row"+id);
-            $("#row"+id).hide() ;
+            console.log("#row" + id);
+            console.log("#row" + id);
+            console.log("#row" + id);
+            console.log("#row" + id);
+            console.log("#row" + id);
+            $("#row" + id).hide();
         },
         error: function (xhr, textStatus, errorThrown) {
 
@@ -37,10 +38,9 @@ function deleteStudentById(id) {
 }
 
 function updateStudentById(id) {
-    var firstName = $("#firstName"+id).val();
-    var lastName = $("#lastName"+id).val();
-    var adress = $("#adress"+id).val();
-
+    var firstName = $("#firstName" + id).val();
+    var lastName = $("#lastName" + id).val();
+    var adress = $("#adress" + id).val();
 
 
     console.log("idijaaaaaa" + id);
@@ -49,11 +49,14 @@ function updateStudentById(id) {
     console.log("idijaaaaaa" + adress);
 
     var input = {
-        id:id,
+        id: id,
         firstName: firstName,
-        lastName:lastName,
+        lastName: lastName,
         adress: adress
     };
+    var plaintext = JSON.stringify(input);
+    var ciphertext = aesUtil.encrypt(salt, iv, passphrase, plaintext);
+    var messsage = {message:ciphertext};
     $.ajax({
 
 
@@ -65,7 +68,7 @@ function updateStudentById(id) {
             'Content-Type': 'application/json',
             Authorization: 'Bearer ' + localStorage.getItem("jwtToken"),
         },
-        data: JSON.stringify(input),
+        data: JSON.stringify(messsage),
         success: function (data, textStatus, jqXHR) {
             $('#status').text("U krijua me sukses");
             console.log("U u perditesua me suksess me sukses");
@@ -77,6 +80,7 @@ function updateStudentById(id) {
     });
 
 }
+
 function attachListeners() {
 
     $("#idStudentShow").hide();
@@ -88,17 +92,16 @@ function attachListeners() {
     });
     $("#createStudent").click(function () {
         createStudent();
-    });$("#homepage").click(function () {
-        window.location="index.html"
+    });
+    $("#homepage").click(function () {
+        window.location = "index.html"
     });
     $("#updateStudent").click(function () {
         updateStudent();
     });
     $("#getAllStudents").click(function () {
-        getAllStudent();
+        getAllStudents();
     });
-
-
 
 
     // If the checkbox is checked, display the output text
@@ -118,6 +121,47 @@ function seeFields() {
     }
 }
 
+
+function postEncrypt() {
+    var input = {
+        firstName: "Ardit",
+        lastName: "Sarja",
+        adress: "Bldskflasdlfjahdsfjksdhfudi"
+    };
+    var plaintext = JSON.stringify(input);
+    var ciphertext = aesUtil.encrypt(salt, iv, passphrase, plaintext);
+    console.log(plaintext);
+    console.log(passphrase);
+    console.log(iv);
+    console.log(salt);
+    console.log(aesUtil);
+    console.log(ciphertext);
+
+    var messsage = {message:ciphertext};
+
+    $.ajax({
+
+        url: "/api/student",
+        method: "POST",
+        dataType: "json",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + localStorage.getItem("jwtToken"),
+        },
+        data:  JSON.stringify(messsage),
+        success: function (data, textStatus, jqXHR) {
+            $('#status').text(data);
+            console.log(data);
+        },
+        error: function (xhr, textStatus, errorThrown) {
+
+            $('#status').text("Ka probleme ne sistem provoni me vone");
+        }
+    });
+}
+
+
 function createStudent() {
 
     var input = {
@@ -125,6 +169,9 @@ function createStudent() {
         lastName: $('#lastNameStudent').val(),
         adress: $('#adress').val()
     };
+    var plaintext = JSON.stringify(input);
+    var ciphertext = aesUtil.encrypt(salt, iv, passphrase, plaintext);
+    var messsage = {message:ciphertext};
     $.ajax({
 
 
@@ -136,7 +183,7 @@ function createStudent() {
             'Content-Type': 'application/json',
             Authorization: 'Bearer ' + localStorage.getItem("jwtToken"),
         },
-        data: JSON.stringify(input),
+        data: JSON.stringify(messsage),
         success: function (data, textStatus, jqXHR) {
             $('#status').text("U krijua me sukses");
             console.log("U krijua me sukses");
@@ -148,7 +195,9 @@ function createStudent() {
     });
 }
 
-function getAllStudent() {
+
+function getAllStudents() {
+
     $.ajax({
 
 
@@ -161,8 +210,14 @@ function getAllStudent() {
             Authorization: 'Bearer ' + localStorage.getItem("jwtToken"),
         },
 
-        success: function (data, textStatus, jqXHR) {
-            console.log(data)
+        success: function (response, textStatus, jqXHR) {
+            console.log(response)
+            console.log(response.message)
+            var data = aesUtil.decrypt(salt, iv, passphrase, response.message);
+            console.log(data);
+            data = JSON.parse(data);
+            console.log(data);
+
 
             var html = "";
             if (data.length > 0) {
@@ -180,13 +235,13 @@ function getAllStudent() {
                 var count = Object.keys(obj).length;
                 console.log(count);
                 var index = 0;
-                var rowClass="warning";
-                if (data[i]%2==0){
-                    rowClass="active";
+                var rowClass = "warning";
+                if (data[i] % 2 == 0) {
+                    rowClass = "active";
                 }
 
 
-                html += '<tr class="'+rowClass+'" id="row'+data[i].id+'">';
+                html += '<tr class="' + rowClass + '" id="row' + data[i].id + '">';
                 for (var key in obj) {
                     index++;
                     if (key != "id") {
@@ -194,28 +249,13 @@ function getAllStudent() {
                         html += "<td><input type='text' class='form-control' id='" + key + data[i].id + "' value='" + value + "'/></td>";
                     }
                     if (index === count) {
-                        html += '<td><button class="btn btn-success" type="button" onclick="updateStudentById('+obj.id+')">Perditso</button></td>';
-                        html += '<td><button class="btn btn-danger" type="button" onclick="deleteStudentById('+obj.id+')">Fshi</button></td>';
+                        html += '<td><button class="btn btn-success" type="button" onclick="updateStudentById(' + obj.id + ')">Perditso</button></td>';
+                        html += '<td><button class="btn btn-danger" type="button" onclick="deleteStudentById(' + obj.id + ')">Fshi</button></td>';
                         index = 0;
                     }
                 }
                 html += '</tr>';
             }
-            // per ta kuptuar si lloghike
-            // for (var i = 0 ;i<data.length;i++)
-            // {
-            //     html += '<tr>';
-            //     html += '<td>';
-            //     html+=data[i].firstName;
-            //     html += '</td>';
-            //     html += '<td>';
-            //     html+=data[i].lastName;
-            //     html += '</td>';
-            //     html += '<td>';
-            //     html+=data[i].adress;
-            //     html += '</td>';
-            //     html += '</tr>';
-            // }
             if (data.length > 0) {
                 html += '</table>';
                 document.getElementById("tabela").innerHTML = html;
@@ -236,6 +276,9 @@ function updateStudent() {
         lastName: $('#lastNameStudent').val(),
         adress: $('#adress').val()
     };
+    var plaintext = JSON.stringify(input);
+    var ciphertext = aesUtil.encrypt(salt, iv, passphrase, plaintext);
+    var messsage = {message:ciphertext};
     $.ajax({
 
 
@@ -247,7 +290,7 @@ function updateStudent() {
             'Content-Type': 'application/json',
             Authorization: 'Bearer ' + localStorage.getItem("jwtToken"),
         },
-        data: JSON.stringify(input),
+        data: JSON.stringify(messsage),
         success: function (data, textStatus, jqXHR) {
             $('#status').text("U perditsua me sukses");
         },

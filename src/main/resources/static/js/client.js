@@ -18,6 +18,9 @@ $(function () {
     }
 
     function setJwtToken(token) {
+        console.log("token");
+        console.log(token);
+
         localStorage.setItem(TOKEN_KEY, token);
     }
 
