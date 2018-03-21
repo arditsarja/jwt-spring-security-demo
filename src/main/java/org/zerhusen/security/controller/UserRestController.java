@@ -1,11 +1,15 @@
 package org.zerhusen.security.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.zerhusen.AesUtil;
+import org.zerhusen.Message;
 import org.zerhusen.security.JwtTokenUtil;
 import org.zerhusen.security.JwtUser;
 
@@ -23,12 +27,28 @@ public class UserRestController {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    ObjectMapper mapper = new ObjectMapper();
+//duhet pare
     @RequestMapping(value = "user", method = RequestMethod.GET)
-    public JwtUser getAuthenticatedUser(HttpServletRequest request) {
+    public Message getAuthenticatedUser(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader).substring(7);
         String username = jwtTokenUtil.getUsernameFromToken(token);
         JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
-        return user;
+        String userJson  = "";
+        try {
+            userJson = mapper.writeValueAsString(user);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        userJson = new AesUtil().encrypt(userJson);
+        return new Message(userJson);
     }
+//    @RequestMapping(value = "user", method = RequestMethod.GET)
+//    public JwtUser getAuthenticatedUser(HttpServletRequest request) {
+//        String token = request.getHeader(tokenHeader).substring(7);
+//        String username = jwtTokenUtil.getUsernameFromToken(token);
+//        JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
+//        return user;
+//    }
 
 }

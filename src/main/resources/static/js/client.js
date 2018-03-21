@@ -89,7 +89,11 @@ $(function () {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             headers: createAuthorizationTokenHeader(),
-            success: function (data, textStatus, jqXHR) {
+            success: function (response, textStatus, jqXHR) {
+                var data = aesUtil.decrypt(salt, iv, passphrase, response.message);
+                console.log(data);
+                data = JSON.parse(data);
+                console.log(data);
                 var $userInfoBody = $userInfo.find("#userInfoBody");
                 isAdmin = false;
                 $userInfoBody.append($("<div>").text("Username: " + data.username));
