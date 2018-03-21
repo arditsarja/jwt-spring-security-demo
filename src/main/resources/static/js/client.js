@@ -9,7 +9,6 @@ $(function () {
     var $response = $("#response");
     var $login = $("#login");
     var $userInfo = $("#userInfo").hide();
-    var adminRegisterUser = $('#adminRegisterUser').hide();
     var isAdmin = false;
 
     // FUNCTIONS =============================================================
@@ -62,7 +61,7 @@ $(function () {
 
     function doLogout() {
         removeJwtToken();
-        adminRegisterUser.hide();
+        $('#adminRegisterUser').addClass("hidden");
         $login.show();
         $userInfo
             .hide()
@@ -105,6 +104,7 @@ $(function () {
                     if (authorityItem.authority === "ROLE_ADMIN") {
                         console.log("is admin");
                         isAdmin = true;
+                        $('#adminRegisterUser').removeClass("hidden");
                     }
                 });
                 var $authorities = $("<div>").text("Authorities:");
