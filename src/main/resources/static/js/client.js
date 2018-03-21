@@ -1,5 +1,3 @@
-
-
 $(function () {
     // VARIABLES =============================================================
     var TOKEN_KEY = "jwtToken";
@@ -31,14 +29,20 @@ $(function () {
 
         console.log("login parameter" + loginData);
         console.log("login parameter" + loginData);
-
+        var plaintext = JSON.stringify(loginData);
+        var ciphertext = aesUtil.encrypt(salt, iv, passphrase, plaintext);
+        var messsage = {message: ciphertext};
         $.ajax({
             url: "/auth",
             type: "POST",
-            data: JSON.stringify(loginData),
+            data: JSON.stringify(messsage),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (data, textStatus, jqXHR) {
+            success: function (response, textStatus, jqXHR) {
+                var data = aesUtil.decrypt(salt, iv, passphrase, response.message);
+                console.log(data);
+                data = JSON.parse(data);
+                console.log(data);
                 setJwtToken(data.token);
                 $login.hide();
                 $notLoggedIn.hide();
@@ -111,9 +115,6 @@ $(function () {
                 $authorities.append($authorityList);
                 $userInfoBody.append($authorities);
                 $userInfo.show();
-                if (isAdmin) {
-                    adminRegisterUser.show();
-                }
             }
         });
     }
@@ -190,7 +191,11 @@ $(function () {
             type: "GET",
             contentType: "application/json; charset=utf-8",
             headers: createAuthorizationTokenHeader(),
-            success: function (data, textStatus, jqXHR) {
+            success: function (response, textStatus, jqXHR) {
+                var data = aesUtil.decrypt(salt, iv, passphrase, response.message);
+                console.log(data);
+                data = JSON.parse(data);
+                console.log(data);
                 console.log("hiiii " + JSON.stringify(data));
                 showResponse(jqXHR.status, data);
             },

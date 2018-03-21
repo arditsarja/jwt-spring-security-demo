@@ -1,15 +1,13 @@
 package org.zerhusen.rest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.web.bind.annotation.*;
-
-
 import org.zerhusen.AesUtil;
 import org.zerhusen.Message;
 import org.zerhusen.databaseservise.entity.PassowordHistory;
@@ -18,12 +16,12 @@ import org.zerhusen.databaseservise.repository.PassordHistoryRepository;
 import org.zerhusen.databaseservise.repository.UserControoller;
 import org.zerhusen.model.security.Authority;
 import org.zerhusen.model.security.User;
-import org.zerhusen.security.JwtAuthenticationRequest;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 @PreAuthorize("hasRole('ADMIN')")
 @RestController
 public class UserController {
@@ -45,6 +43,7 @@ public class UserController {
 
 
     ObjectMapper mapper = new ObjectMapper();
+
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/create_user/{authority}", method = RequestMethod.PUT)
     public String createUser(@RequestBody Message message, @PathVariable("authority") String authority) {
@@ -52,7 +51,7 @@ public class UserController {
         String plaintext = new AesUtil().decrypt(message.getMessage());
         User user = null;
         try {
-            user =  mapper.readValue(plaintext, User.class);
+            user = mapper.readValue(plaintext, User.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -88,8 +87,15 @@ public class UserController {
         user.setPassword("ji");
         user.setAuthorities(new ArrayList<>());
 
-        ResponseEntity<User> responseEntity =
-                new ResponseEntity<User>(user, HttpStatus.OK);
+        String userJson = "";
+        try {
+            userJson = mapper.writeValueAsString(user);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        userJson = new AesUtil().encrypt(userJson);
+        ResponseEntity<Message> responseEntity =
+                new ResponseEntity<Message>(new Message(userJson), HttpStatus.OK);
 
 
         return responseEntity;
