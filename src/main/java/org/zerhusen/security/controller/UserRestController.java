@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.zerhusen.AesUtil;
-import org.zerhusen.Message;
+import org.zerhusen.encryption.AesUtil;
+import org.zerhusen.model.Message;
 import org.zerhusen.security.JwtTokenUtil;
 import org.zerhusen.security.JwtUser;
 
@@ -29,7 +29,7 @@ public class UserRestController {
     private UserDetailsService userDetailsService;
 
     ObjectMapper mapper = new ObjectMapper();
-//duhet pare
+
     @RequestMapping(value = "user", method = RequestMethod.GET)
     public Message getAuthenticatedUser(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader).substring(7);

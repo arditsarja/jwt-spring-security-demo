@@ -1,4 +1,4 @@
-package org.zerhusen.security;
+package org.zerhusen.security.service;
 
 import org.springframework.mobile.device.Device;
 import org.springframework.mobile.device.DevicePlatform;

@@ -1,4 +1,4 @@
-package org.zerhusen.rest;
+package org.zerhusen.security.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,12 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.zerhusen.AesUtil;
-import org.zerhusen.Message;
-import org.zerhusen.databaseservise.entity.PassowordHistory;
-import org.zerhusen.databaseservise.repository.AuthorityController;
-import org.zerhusen.databaseservise.repository.PassordHistoryRepository;
-import org.zerhusen.databaseservise.repository.UserControoller;
+import org.zerhusen.encryption.AesUtil;
+import org.zerhusen.model.Message;
+import org.zerhusen.security.repository.AuthorityController;
+import org.zerhusen.security.repository.UserControoller;
 import org.zerhusen.model.security.Authority;
 import org.zerhusen.model.security.User;
 
@@ -35,14 +33,12 @@ public class UserController {
     UserControoller controller;
 
     @Autowired
-    PassordHistoryRepository repository;
-
-
-    @Autowired
     AuthorityController authorityController;
 
 
     ObjectMapper mapper = new ObjectMapper();
+
+
 
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/create_user/{authority}", method = RequestMethod.PUT)
@@ -74,7 +70,6 @@ public class UserController {
         String passord = user.getPassword();
         String passordEncoder = passwordEncoder.encode(passord);
         user.setPassword(passordEncoder);
-        repository.save(new PassowordHistory(user.getId(), passord, passordEncoder));
         controller.saveUser(user);
 
         return "DF";

@@ -1,4 +1,4 @@
-package org.zerhusen.databaseservise.controller;
+package org.zerhusen.security.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -6,22 +6,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.zerhusen.AesUtil;
-import org.zerhusen.Encryption;
-import org.zerhusen.Message;
-import org.zerhusen.databaseservise.entity.Student;
-import org.zerhusen.databaseservise.repository.StudentRepository;
-import org.zerhusen.databaseservise.repository.UserControoller;
+import org.zerhusen.encryption.AesUtil;
+import org.zerhusen.model.Message;
+import org.zerhusen.model.security.Student;
+import org.zerhusen.security.repository.StudentRepository;
+import org.zerhusen.security.repository.UserControoller;
 import org.zerhusen.model.security.User;
 
 import java.io.IOException;
-import java.util.List;
 
 @CrossOrigin(origins = {"*"}, maxAge = 3600)
 @RestController

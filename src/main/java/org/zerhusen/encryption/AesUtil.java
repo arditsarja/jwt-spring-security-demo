@@ -1,4 +1,4 @@
-package org.zerhusen;
+package org.zerhusen.encryption;
 
 
 import java.io.UnsupportedEncodingException;
