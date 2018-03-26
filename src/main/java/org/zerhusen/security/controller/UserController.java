@@ -10,15 +10,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.zerhusen.encryption.AesUtil;
 import org.zerhusen.model.Message;
-import org.zerhusen.security.repository.AuthorityController;
-import org.zerhusen.security.repository.UserControoller;
 import org.zerhusen.model.security.Authority;
 import org.zerhusen.model.security.User;
+import org.zerhusen.security.repository.AuthorityController;
+import org.zerhusen.security.repository.UserControoller;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 @CrossOrigin(origins = {"*"}, maxAge = 3600)
 @PreAuthorize("hasRole('ADMIN')")
 @RestController
@@ -39,7 +40,6 @@ public class UserController {
     ObjectMapper mapper = new ObjectMapper();
 
 
-
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/create_user/{authority}", method = RequestMethod.PUT)
     public String createUser(@RequestBody Message message, @PathVariable("authority") String authority) {
@@ -50,6 +50,10 @@ public class UserController {
             user = mapper.readValue(plaintext, User.class);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+//        if (user==null || controller.findByUsername(user.getUsername())!=null){
+        if (user == null) {
+            return "this user exist";
         }
         user.setLastPasswordResetDate(new Date());
         List<Authority> authorities = new ArrayList<>();

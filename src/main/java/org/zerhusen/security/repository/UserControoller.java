@@ -37,10 +37,15 @@ public class UserControoller {
         return em.find(User.class, id);
     }
 
-    
-
+//    public User findByUsername(String username) {
+////        Object obj = em.createNativeQuery("SELECT * FROM User WHERE username = " + username).getSingleResult();
+//        Query query = em.getCriteriaBuilder().createQuery("from User u where u.username=:username").;
+//        query.setParameter("username",username);
+//        User user = (User) ;
+//        return user;
+//    }
 //    public User findByUsername(String name) {
 //
-//        Query query = em.find(User.class,id);
+//        Query query query="SELECT c FROM User c WHERE c.username = username"
 //    }
 }

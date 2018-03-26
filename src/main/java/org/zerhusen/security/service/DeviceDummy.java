@@ -3,9 +3,6 @@ package org.zerhusen.security.service;
 import org.springframework.mobile.device.Device;
 import org.springframework.mobile.device.DevicePlatform;
 
-/**
- * Created by stephan on 04.07.17.
- */
 public class DeviceDummy implements Device {
 
     private boolean normal;

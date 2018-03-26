@@ -9,9 +9,6 @@ import org.zerhusen.model.security.User;
 import org.zerhusen.security.JwtUserFactory;
 import org.zerhusen.security.repository.UserRepository;
 
-/**
- * Created by stephan on 20.03.16.
- */
 @Service
 public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
