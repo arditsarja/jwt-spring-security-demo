@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+@CrossOrigin(origins = {"*"}, maxAge = 3600)
 @PreAuthorize("hasRole('ADMIN')")
 @RestController
 public class UserController {
