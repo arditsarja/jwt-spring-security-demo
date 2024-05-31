@@ -1,5 +1,6 @@
 package org.zerhusen.model.security;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,47 +21,31 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "USER")
 public class User {
 
     @Id
-    @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
-    @SequenceGenerator(name = "user_seq", sequenceName = "user_seq", allocationSize = 1)
+    @GeneratedValue
+
     private Long id;
 
-    @Column(name = "USERNAME", length = 50, unique = true)
-    @NotNull
-    @Size(min = 4, max = 50)
+
     private String username;
 
-    @Column(name = "PASSWORD", length = 100)
-    @NotNull
-    @Size(min = 4, max = 100)
+
     private String password;
 
-    @Column(name = "FIRSTNAME", length = 50)
-    @NotNull
-    @Size(min = 4, max = 50)
     private String firstname;
 
-    @Column(name = "LASTNAME", length = 50)
-    @NotNull
-    @Size(min = 4, max = 50)
+
     private String lastname;
 
-    @Column(name = "EMAIL", length = 50)
-    @NotNull
-    @Size(min = 4, max = 50)
+
     private String email;
 
-    @Column(name = "ENABLED")
-    @NotNull
+
     private Boolean enabled;
 
-    @Column(name = "LASTPASSWORDRESETDATE")
-    @Temporal(TemporalType.TIMESTAMP)
-    @NotNull
+
     private Date lastPasswordResetDate;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -69,6 +54,20 @@ public class User {
             joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
             inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
     private List<Authority> authorities;
+
+    public User(){}
+
+    public User(String username, String password, String firstname, String lastname, String email, Boolean enabled) {
+        this.username = username;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.enabled = enabled;
+        this.lastPasswordResetDate = new Date();
+
+
+    }
 
     public Long getId() {
         return id;
@@ -140,5 +139,9 @@ public class User {
 
     public void setLastPasswordResetDate(Date lastPasswordResetDate) {
         this.lastPasswordResetDate = lastPasswordResetDate;
+    }
+
+    public void addAuthority(Authority authority) {
+        this.authorities.add(authority);
     }
 }

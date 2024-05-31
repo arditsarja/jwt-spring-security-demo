@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nderfaqe Perdoruesi</title>
+    <!--<script src="https://code.jquery.com/jquery-2.2.2.js" integrity="sha256-4/zUCqiq0kqxhZIyp4G0Gk+AOtCJsY1TA00k5ClsZYE="-->
+    <!--crossorigin="anonymous"></script>-->
+    <!--&lt;!&ndash; Latest compiled and minified JavaScript &ndash;&gt;-->
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"-->
+    <!--integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"-->
+    <!--crossorigin="anonymous"></script>-->
+
+
+    <link rel="stylesheet" href="js/libs/bootstrap.min.css">
+    <link rel="stylesheet" href="js/libs/bootstrap-theme.min.css">
+    <script src="js/libs/jquery-2.2.2.js"></script>
+    <script src="js/libs/bootstrap.min.js"></script>
+    <script src="js/libs/aes.js"></script>
+    <script src="js/libs/pbkdf2.js"></script>
+    <script src="js/libs/AesUtil.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/user.js"></script>
+</head>
+
+<body>
+
+<button id="homepage" class="btn btn-primary"> Kthehu</button>
+KEtu eshte nderfaqja e perdoruesit
+<p id = "tokeni"></p>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div><br>
+                <div id="idStudentShow">ID<input class="form-control" id="idStudent" type="text">
+
+                </div>
+                <input id="create" type="checkbox" value="krijo"> Perditeso Perdorues
+                <div>Emer<input class="form-control" id="firstNameStudent" type="text"></div>
+                <div>Mbiemer<input class="form-control" id="lastNameStudent" type="text"></div>
+                <div>Adresa<input class="form-control" id="adress" type="text"></div>
+                <button type="button" class="btn btn-success" id="createStudent">Krijo</button>
+                <button type="button" class="btn btn-success" id="updateStudent">Perditso</button>
+
+            </div>
+        </div>
+        <div class="col-xs-12"><p id="status"></p></div>
+        <div class="col-xs-12">
+            <button class="btn btn-primary" type="button" id="getAllStudents">Afisho tabelen e plote</button>
+        </div>
+        <div class="col-xs-12" id="tabela"></div>
+    </div>
+</div>
+</body>
+</html>

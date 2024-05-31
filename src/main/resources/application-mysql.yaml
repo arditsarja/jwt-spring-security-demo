@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    url: jdbc:mysql://localhost:3306/project?createDatabaseIfNotExist=true
+    testWhileIdle: 'true'
+    # Keep the connection alive if idle for a long time (needed in production)
+    validationQuery: SELECT 1
+    password: password
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          import_files: schema-mysql.sql
+        # Allows Hibernate to generate SQL optimized for a particular DBMS
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        # Show or not log for each sql query
+    show-sql: 'true'
+    hibernate:
+      # Hibernate ddl auto (create, create-drop, update): with "create-drop" the database
+      # schema will be automatically created afresh for every start of application
+#      first time set create
+      ddl-auto: update
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyHbmImpl
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy

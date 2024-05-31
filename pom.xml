@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.zerhusen</groupId>
+    <groupId>org.service</groupId>
     <artifactId>jwt-spring-security-demo</artifactId>
     <version>0.2.0</version>
     <packaging>jar</packaging>
@@ -11,26 +11,9 @@
     <name>jwt-spring-security-demo</name>
     <description>Demo project for JWT with Spring Boot and Spring Security</description>
 
-    <licenses>
-        <license>
-            <name>MIT license</name>
-            <url>https://raw.githubusercontent.com/szerhusenBC/jwt-spring-security-demo/master/LICENSE</url>
-        </license>
-    </licenses>
 
-    <developers>
-        <developer>
-            <name>Stephan Zerhusen</name>
-            <email>stephan.zerhusen@gmail.com</email>
-        </developer>
-    </developers>
 
-    <scm>
-        <connection>scm:git:git://github.com/szerhusenBC/jwt-spring-security-demo.git</connection>
-        <url>https://github.com/szerhusenBC/jwt-spring-security-demo</url>
-        <developerConnection>scm:git:git@github.com/szerhusenBC/jwt-spring-security-demo.git</developerConnection>
-        <tag>HEAD</tag>
-    </scm>
+
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -53,6 +36,10 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -87,7 +74,11 @@
             <artifactId>findbugs</artifactId>
             <version>${findbugs.annotations.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.9</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -97,6 +88,11 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+<!--            <version>5.0.2.BUILD-SNAPSHOT</version>-->
         </dependency>
     </dependencies>
 
@@ -183,7 +179,7 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>${jacoco.version}</version>
+<!--                        <version>${jacoco.version}</version>-->
                         <executions>
                             <execution>
                                 <id>prepare-agent</id>

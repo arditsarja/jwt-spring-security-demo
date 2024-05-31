@@ -1,16 +1,13 @@
-/**
- * Created by stephan on 20.03.16.
- */
-
 $(function () {
     // VARIABLES =============================================================
-    var TOKEN_KEY = "jwtToken"
+    var TOKEN_KEY = "jwtToken";
     var $notLoggedIn = $("#notLoggedIn");
     var $loggedIn = $("#loggedIn").hide();
     var $loggedInBody = $("#loggedInBody");
     var $response = $("#response");
     var $login = $("#login");
     var $userInfo = $("#userInfo").hide();
+    var isAdmin = false;
 
     // FUNCTIONS =============================================================
     function getJwtToken() {
@@ -18,6 +15,9 @@ $(function () {
     }
 
     function setJwtToken(token) {
+        console.log("token");
+        console.log(token);
+
         localStorage.setItem(TOKEN_KEY, token);
     }
 
@@ -26,13 +26,23 @@ $(function () {
     }
 
     function doLogin(loginData) {
+
+        console.log("login parameter" + loginData);
+        console.log("login parameter" + loginData);
+        var plaintext = JSON.stringify(loginData);
+        var ciphertext = aesUtil.encrypt(salt, iv, passphrase, plaintext);
+        var messsage = {message: ciphertext};
         $.ajax({
             url: "/auth",
             type: "POST",
-            data: JSON.stringify(loginData),
+            data: JSON.stringify(messsage),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (data, textStatus, jqXHR) {
+            success: function (response, textStatus, jqXHR) {
+                var data = aesUtil.decrypt(salt, iv, passphrase, response.message);
+                console.log(data);
+                data = JSON.parse(data);
+                console.log(data);
                 setJwtToken(data.token);
                 $login.hide();
                 $notLoggedIn.hide();
@@ -55,6 +65,7 @@ $(function () {
 
     function doLogout() {
         removeJwtToken();
+        $('#adminRegisterUser').addClass("hidden");
         $login.show();
         $userInfo
             .hide()
@@ -73,6 +84,7 @@ $(function () {
         }
     }
 
+
     function showUserInformation() {
         $.ajax({
             url: "/user",
@@ -80,19 +92,27 @@ $(function () {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             headers: createAuthorizationTokenHeader(),
-            success: function (data, textStatus, jqXHR) {
+            success: function (response, textStatus, jqXHR) {
+                var data = aesUtil.decrypt(salt, iv, passphrase, response.message);
+                console.log(data);
+                data = JSON.parse(data);
+                console.log(data);
                 var $userInfoBody = $userInfo.find("#userInfoBody");
-
+                isAdmin = false;
                 $userInfoBody.append($("<div>").text("Username: " + data.username));
                 $userInfoBody.append($("<div>").text("Email: " + data.email));
 
                 var $authorityList = $("<ul>");
                 data.authorities.forEach(function (authorityItem) {
                     $authorityList.append($("<li>").text(authorityItem.authority));
+                    if (authorityItem.authority === "ROLE_ADMIN") {
+                        console.log("is admin");
+                        isAdmin = true;
+                        $('#adminRegisterUser').removeClass("hidden");
+                    }
                 });
                 var $authorities = $("<div>").text("Authorities:");
                 $authorities.append($authorityList);
-
                 $userInfoBody.append($authorities);
                 $userInfo.show();
             }
@@ -155,6 +175,8 @@ $(function () {
             dataType: "json",
             headers: createAuthorizationTokenHeader(),
             success: function (data, textStatus, jqXHR) {
+
+                console.log("hiiii " + JSON.stringify(data));
                 showResponse(jqXHR.status, JSON.stringify(data));
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -169,7 +191,12 @@ $(function () {
             type: "GET",
             contentType: "application/json; charset=utf-8",
             headers: createAuthorizationTokenHeader(),
-            success: function (data, textStatus, jqXHR) {
+            success: function (response, textStatus, jqXHR) {
+                var data = aesUtil.decrypt(salt, iv, passphrase, response.message);
+                console.log(data);
+                data = JSON.parse(data);
+                console.log(data);
+                console.log("hiiii " + JSON.stringify(data));
                 showResponse(jqXHR.status, data);
             },
             error: function (jqXHR, textStatus, errorThrown) {
