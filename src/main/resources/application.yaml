@@ -8,8 +8,8 @@ spring:
     serialization:
       INDENT_OUTPUT: true
   profiles:
-#    active: m2
-    active: mysql
+    active: m2
+#    active: mysql
 
 
 jwt:
